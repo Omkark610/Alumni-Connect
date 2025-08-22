@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Alumni } from "@/types/alumni";
 
 export default function EditAlumniPage({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const [form, setForm] = useState<any>(null);
+  const [form, setForm] = useState<alumni>(null);
 
   useEffect(() => {
     fetch(`/api/alumni/${params.id}`)

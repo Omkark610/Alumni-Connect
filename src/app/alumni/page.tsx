@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Alumni } from "@/types/alumni";
 
 export default function AlumniListPage() {
-  const [alumni, setAlumni] = useState<any[]>([]);
+  const [alumni, setAlumni] = useState<Alumni[]>([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   const router = useRouter();
 
@@ -20,7 +21,7 @@ export default function AlumniListPage() {
       if (!data.user) {
         router.push("/login");
       } else {
-        setLoading(false);
+        // setLoading(false);
       }
     };
     checkAuth();
