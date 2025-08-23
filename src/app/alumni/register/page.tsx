@@ -8,22 +8,42 @@ export default function RegisterAlumniPage() {
   const [form, setForm] = useState({
     name: "",
     email: "",
+    password: "",
     passoutYear: "",
     linkedin: "",
     instagram: "",
     linktree: "",
-    password: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch("/api/alumni", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    if (res.ok) router.push("/alumni");
+    try {
+      const res = await fetch("/api/alumni", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.success === false) {
+        // Handle duplicate email or other errors
+        if (data.error?.includes("email_1 dup key")) {
+          alert("This email is already registered. Please use another one.");
+        } else {
+          alert(data.error || "Failed to register. Please try again.");
+        }
+        return;
+      }
+
+      // If successful → redirect
+      router.push("/alumni");
+    } catch (err) {
+      console.error("Error submitting form:", err);
+      alert("Something went wrong. Please try again later.");
+    }
   };
+
 
   return (
     <div className="max-w-lg mx-auto p-6">
@@ -37,7 +57,7 @@ export default function RegisterAlumniPage() {
             value={(form as any)[key]}
             onChange={(e) => setForm({ ...form, [key]: e.target.value })}
             className="w-full border p-2 rounded"
-            required={["name", "email", "passoutYear", "password"].includes(key)}
+            required={["name", "email", "passoutYear", "password", "linkedin"].includes(key)}
           />
         ))}
         <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
